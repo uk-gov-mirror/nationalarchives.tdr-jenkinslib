@@ -1,10 +1,11 @@
-def call(Map calledParams) {
+def call(Map config) {
     pipeline {
         agent {
             label "master"
         }
         parameters {
-            choice(name: "STAGE", choices: ["intg", "staging", "prod"], description: "The stage you are building the auth server for")
+            choice(name: "STAGE", choices: ["intg", "staging"], description: "The stage you are building the auth server for")
+            string(name: "TO_DEPLOY", description: "The git tag, branch or commit reference to deploy, e.g. 'v123'")
         }
         stages {
             stage("Docker") {
@@ -14,7 +15,8 @@ def call(Map calledParams) {
                 steps {
                     script {
                         echo "STAGE: ${params.STAGE}"
-                        slackSend color: "good", message: "*${calledParams.imageName}* :whale: The '${calledParams.toDeploy}' image has been tagged with '${calledParams.stage}' in Docker Hub", channel: "#bot-testing"
+                        echo "TO_DEPLOY: ${parms.TO_DEPLOY}"
+                        slackSend color: "good", message: "*${config.imageName}* :whale: The '${params.TO_DEPLOY}' image has been tagged with '${params.STAGE}' in Docker Hub", channel: "#bot-testing"
                     }
                 }
             }
