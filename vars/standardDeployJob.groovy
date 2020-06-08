@@ -14,7 +14,9 @@ def call(Map params) {
                 }
                 steps {
                     script {
-                        echo "STAGE: ${params.STAGE}"
+                        def releaseBranch = "release-${env.STAGE}"
+                        
+                        echo "Release Branch: ${releaseBranch}"
                         echo "TO_DEPLOY: ${params.TO_DEPLOY}"
                         slackSend color: "good", message: "*${params.IMAGE_NAME}* :whale: The '${params.TO_DEPLOY}' image has been tagged with '${params.STAGE}' in Docker Hub", channel: "#bot-testing"
                     }
