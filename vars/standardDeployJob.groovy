@@ -1,4 +1,4 @@
-def call(Map params) {
+def call(Map calledParams) {
     pipeline {
         agent {
             label "master"
@@ -14,7 +14,7 @@ def call(Map params) {
                 steps {
                     script {
                         echo "STAGE: ${params.STAGE}"
-                        slackSend color: "good", message: "*${params.imageName}* :whale: The '${params.toDeploy}' image has been tagged with '${params.stage}' in Docker Hub", channel: "#bot-testing"
+                        slackSend color: "good", message: "*${calledParams.imageName}* :whale: The '${calledParams.toDeploy}' image has been tagged with '${calledParams.stage}' in Docker Hub", channel: "#bot-testing"
                     }
                 }
             }
