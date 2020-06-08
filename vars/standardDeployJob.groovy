@@ -15,7 +15,7 @@ def call(Map config) {
                 steps {
                     script {
                         echo "STAGE: ${params.STAGE}"
-                        echo "TO_DEPLOY: ${parms.TO_DEPLOY}"
+                        echo "TO_DEPLOY: ${params.TO_DEPLOY}"
                         slackSend color: "good", message: "*${config.imageName}* :whale: The '${params.TO_DEPLOY}' image has been tagged with '${params.STAGE}' in Docker Hub", channel: "#bot-testing"
                     }
                 }
