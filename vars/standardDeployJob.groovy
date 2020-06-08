@@ -3,14 +3,14 @@ def call(Map params) {
         agent {
             label "master"
         }
+        parameters {
+            choice(name: "STAGE", choices: ["intg", "staging", "prod"], description: "The stage you are deploying to")
+            string(name: "TO_DEPLOY", description: "The git tag, branch or commit reference to deploy, e.g. 'v123'")
+        }
         stages {
             stage("Docker") {
                 agent {
                     label "master"
-                }
-                parameters {
-                    choice(name: "STAGE", choices: ["intg", "staging", "prod"], description: "The stage you are deploying to")
-                    string(name: "TO_DEPLOY", description: "The git tag, branch or commit reference to deploy, e.g. 'v123'")
                 }
                 steps {
                     script {
@@ -45,9 +45,12 @@ def call(Map params) {
                     label "master"
                 }
                 steps {
-                    def releaseBranch = "release-${env.STAGE}"
+                    script {
+                        def releaseBranch = "release-${env.STAGE}"
 
-                    echo "Release Branch: ${releaseBranch}"
+                        echo "Release Branch: ${releaseBranch}"
+                    }
+
 
 //                    sh "git branch -f ${releaseBranch} HEAD"
 //                    sshagent(['github-jenkins']) {
