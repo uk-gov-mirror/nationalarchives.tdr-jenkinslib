@@ -4,6 +4,7 @@ def call(Map config) {
 
   def versionTag = "v${env.BUILD_NUMBER}"
   def repo = "tdr-${config.libraryName}"
+  def workingDir = config.workingDir ?: "."
 
   pipeline {
     agent {
@@ -32,7 +33,9 @@ def call(Map config) {
         steps {
           script {
             tdr.reportStartOfBuildToGitHub(repo, env.GIT_COMMIT)
-            tdr.assembleAndStash(config.libraryName)
+            dir(workingDir) {
+              tdr.assembleAndStash(config.libraryName)
+            }
           }
         }
       }
